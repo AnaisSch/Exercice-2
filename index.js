@@ -6,7 +6,6 @@ const sqlConfig = settings.sqlConfig;
 
 const app = express();
 
-
 app.listen(3000, () => {
     console.log("LE SERVEUR DÉMARRE ...  !");
 });
@@ -18,12 +17,12 @@ app.get("/api/articles", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
     sqlConnection.query(
-        "SELECT id, title, content, author, created_at FROM node_articles WHERE id = 1 LIMIT 1",
+        "SELECT id, title, content, author, created_at FROM node_articles ORDER BY id DESC LIMIT 5",
         (error, result) => {
             if (error) {
                 console.log("ERREUR :", error.code);
             } else {
-                res.send(result[0]);
+                res.send(result);
             }
             sqlConnection.end();
         });
@@ -33,12 +32,12 @@ app.get("/api/comments", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
     sqlConnection.query(
-        "SELECT id, articleId, author, content, created_at FROM node_comments WHERE id = 1 LIMIT 1",
+        "SELECT id, article_id, author, content, created_at FROM node_comments ORDER BY id DESC LIMIT 5",
         (error, result) => {
             if (error) {
                 console.log("ERREUR :", error.code);
             } else {
-                res.send(result[0]);
+                res.send(result);
             }
             sqlConnection.end();
         });
@@ -49,7 +48,7 @@ app.route("/api/articles/create")
     .post((req, res) => {
         console.log(req.body);
         const sqlConnection = mysql.createConnection(sqlConfig);
-
+        
         sqlConnection.query(
             "INSERT INTO node_articles VALUES (NULL, ?, ?, ?, ?)",
             [req.body.title, req.body.content, req.body.author, req.body.created_at],
@@ -84,7 +83,7 @@ app.route("/api/articles/delete")
                 sqlConnection.end();
             });
     });
-
+    
 app.route("/api/comments/create")
     .get((req, res) => res.status(503).send({ status: "ERREUR" }))
     .post((req, res) => {
