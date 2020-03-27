@@ -1,0 +1,27 @@
+form {
+  /* Uniquement centrer le formulaire sur la page */
+  margin: 0 auto;
+  width: 450px;
+  /* Encadré pour voir les limites du formulaire */
+  padding: 1em;
+  border: 1px solid #CCC;
+  border-radius: 1em;
+  background-color: #8EB4E9;
+}
+form div + div {
+  margin-top: 1em;
+}
+label {
+  /* Pour être sûrs que toutes les étiquettes ont même taille et sont correctement alignées */
+  display: inline-block;
+  width: 150px;
+  text-align: right;
+}
+.button {
+  /* Pour placer le bouton à la même position que les champs texte */
+  padding-left: 150px; /* même taille que les étiquettes */
+}
+button {
+  /* Cette marge supplémentaire représente grosso modo le même espace que celui entre les étiquettes et les champs texte */
+  margin-left: .5em;
+}

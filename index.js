@@ -1,4 +1,4 @@
-const express = require(express);
+const express = require("expres");
 const mysql = require("mysql");
 
 const settings = require("./settings.json");
@@ -13,9 +13,7 @@ app.listen(3000, () => {
 app.get("/", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
-    sqlConnection.query(
-        "INSERT INTO node_users VALUES (NULL, ?, ?, ?, ?, ?)",
-        [req.body.email, req.body.password, req.body.firstname, req.body.lastname, req.body.birthdate],
+    sqlConnection.query(       
         (error, result) => {
             if (error) {
                 console.log("ERROR :", error.code);

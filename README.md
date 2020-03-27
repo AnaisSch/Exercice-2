@@ -1,0 +1,33 @@
+- [X] Initialiser projet Node
+- [X] Initialiser projet Git
+- [X] Publication sur GitHub
+- [X] Installation eslint et configuration
+- [X] Installation express et mysql 
+- [X] Création d'une table MySQL → mettre les commandes de création dans le projet (fichier.sql) → comme un mémo.
+    - [X] Articles
+        - [X] id
+        - [X] title
+        - [X] content
+        - [X] author (INT)
+        - [X] created_at (DATETIME)
+    - [X] Comments
+        - [X] id
+        - [X] article_id (INT)
+        - [X] author (INT)
+        - [X] content 
+        - [X] created_at (DATETIME)
+
+- [ ] Création d'un CRD (pas d'Update, on l'a pas vu) node :
+    - [ ] Route '/api/articles/create' → permet de créer un article_id
+    - [ ] Route '/api/article/delete' → permet de supprimer un article par son id
+    - [ ] Route '/api/articles' → permet de récupérer les 5 derniers articles créés dans un tableau 
+    - [ ] Route '/api/comments/create' → permet de créer un commentaire
+    - [ ] Route '/api/comments/delete' → permet de supprimer un commentaire par son id 
+    - [ ] Route '/api/comments' → permet de récupérer les 5 derniers commentaires postés 
+- [X] Création de formulaires HTML pour tout tester
+    - [X] Articles
+        - [X] create.html
+        - [X] delete.html
+    - [X] Comments
+        - [X] create.html
+        - [X] delete.html 
