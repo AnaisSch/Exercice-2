@@ -5,6 +5,19 @@ const app = require("../app.js");
 app.route("/api/articles/create")
     .get((req, res) => res.status(503).send({ status: "ERROR" }))
     .post((req, res) => {
+        if (typeof req.body.title !== "string" || req.body.title === "") {
+            res.status(503).send({ status: "ERROR", extra: "Vous devez renseigner un titre"});
+            return;
+        }
+        if (typeof req.body.content !== "string" || req.body.content === "") {
+            res.status(503).send({ status: "ERROR", extra: "Le contenu de l'article est vide"});
+            return;
+        }
+        if (typeof req.body.author !== "string" || req.body.author === "") {
+            res.status(503).send({ status: "ERROR", extra: "L'auteur n'est pas renseigné"});
+            return;
+        }
+
         const sqlConnection = mysql.createConnection(sqlConfig);
         sqlConnection.query(
             "INSERT INTO node_articles(title, content, author) VALUES (?, ?, ?);",
@@ -25,6 +38,11 @@ app.route("/api/articles/create")
 app.route("/api/articles/delete")
     .get((req, res) => res.status(503).send({ status: "ERROR" }))
     .post((req, res) => {
+        if (typeof req.body.id !== "string" || req.body.id === "") {
+            res.status(503).send({ status: "ERROR", extra: "Vous devez renseigner un id d'article" });
+            return;
+        }
+
         const sqlConnection = mysql.createConnection(sqlConfig);
         sqlConnection.query(
             "DELETE FROM node_articles WHERE id = ?;",
@@ -35,7 +53,12 @@ app.route("/api/articles/delete")
                     res.status(503).send({ status: "ERROR" });
                 } else {
                     console.log(result);
-                    res.send({ status: "OK" });
+                    if (result.affectedRows === 0) {
+                        res.status(503).send({ status: "ERROR", extra: "L'article n'existe pas"});
+                    } else {
+                        res.send({ status: "OK" });
+                    }
+                    
                 }
                 sqlConnection.end();
             }
