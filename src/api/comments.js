@@ -27,7 +27,10 @@ app.route("/api/comments/create")
                     res.status(503).send({ status: "ERROR" });
                 } else {
                     console.log(result);
-                    res.send({ status: "OK" });
+                    res.send({
+                        status: "OK", result: {
+                            commentId: result.insertId
+                        }});
                 }
                 sqlConnection.end();
             }
@@ -37,7 +40,7 @@ app.route("/api/comments/create")
 app.route("/api/comments/delete")
     .get((req, res) => res.status(503).send({ status: "ERROR" }))
     .post((req, res) => {
-        if (typeof req.body.id !== "string" || req.body.id === "") {
+        if (typeof req.body.id !== "number" || req.body.id <= 0) {
             res.status(503).send({ status: "ERROR", extra: "Vous devez renseigner un id du commentaire" });
             return;
         }
@@ -52,7 +55,11 @@ app.route("/api/comments/delete")
                     res.status(503).send({ status: "ERROR" });
                 } else {
                     console.log(result);
-                    res.send({ status: "OK" });
+                    if (result.affectedRows === 0) {
+                        res.status(503).send({ status: "ERROR", extra: "le commentaire n'existe pas." });
+                    } else {
+                        res.send({ status: "OK" });
+                    }
                 }
                 sqlConnection.end();
             }
@@ -63,14 +70,14 @@ app.get("/api/comments", (req, res) => {
     const sqlConnection = mysql.createConnection(sqlConfig);
 
     sqlConnection.query(
-        "SELECT articleId, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
+        "SELECT node_comments.id, articleId, content, node_users.firstname AS authorFirstname, node_users.lastname AS authorLastname, created_at"
         + "  FROM node_comments"
         + "  LEFT JOIN node_users"
         + "  ON node_comments.author = node_users.id"
         + "  WHERE articleId = ?"
         + "  ORDER BY created_at DESC"
         + "  LIMIT 5;",
-        [req.query.articles_id],
+        [req.query.articleId],
         (error, result) => {
             if (error) {
                 console.log(error.code);
